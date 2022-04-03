@@ -1,5 +1,6 @@
-import { ethers, BigNumber } from "ethers"
+import { ethers, Signer, BigNumber } from "ethers"
 const ABI = require('../ABI.json')
+const ABI_TKN = require('../TOKEN.json') 
 
 interface State {
   contract: object,
@@ -8,6 +9,10 @@ interface State {
   inputValue: number,
   errorInput: boolean,
 }
+
+const provider = new ethers.providers.JsonRpcProvider('https://data-seed-prebsc-1-s1.binance.org:8545/')
+const address = "0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C"
+const token_address = '0x275E113c3cd4f80133F99932aAaFaC4A4BA06524'
 
 export const connectModule = {
     state: ():State => ({
@@ -37,18 +42,31 @@ export const connectModule = {
           try {
             await dispatch("getWallet")
 
-            const address = "0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C"
-            const provider = new ethers.providers.Web3Provider((window as any).ethereum)
+            const metamask = new ethers.providers.Web3Provider((window as any).ethereum)
+            const signer = metamask.getSigner()
+            state.wallet
             //С помощью провайдера мы подключаемся к сети Blockcain
             const contract = new ethers.Contract(address, ABI, provider)
             state.contract = contract
-            
-            //Дает нам возможность читать view методы контракта
-            const signer = provider.getSigner()
-            state.wallet
-            //Нужен для подтверждения транзакций
+
+            const tokenContract = new ethers.Contract(token_address, ABI_TKN, signer)
             const wallet = await signer.getAddress(); 
             state.wallet = wallet
+
+            let tx
+            try {
+              tx = await tokenContract.approve(address, BigNumber.from('1').mul(10).pow(18))
+            }
+            catch (err) {
+              console.log(err)
+            }
+            tx.wait
+            
+            
+            console.log(tx);
+            
+            
+            //Нужен для подтверждения транзакций
             
          
             // Получить кошелек
@@ -68,6 +86,8 @@ export const connectModule = {
           alert("Please install metamask")
         }
       },
+
+
       async getWallet({state}: any):Promise<void> {
 			  try {
           const accounts = await (window as any).ethereum.request({
