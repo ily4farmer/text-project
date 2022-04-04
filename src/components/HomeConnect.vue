@@ -3,7 +3,7 @@
         <h2 class="modal__title">Select the payment card that you want to use for payment</h2>
         <span class="modal__subtitle">The selected wallet will be connected to your staking</span>
         <div class="modal__footer">
-            <div class="modal__btn" @click="fetchAccount">
+            <div class="modal__btn" @click="connectAccount">
                 <img 
                     class="modal__btn-img" 
                     src="@/Icons/MetaMask.svg" 
@@ -29,9 +29,16 @@ import { mapActions, mapMutations } from 'vuex'
 
 export default defineComponent({
     methods: {
+        ...mapMutations({
+            hideModal: "modal/hideModal"
+        }),
         ...mapActions({
             fetchAccount: "connect/fetchAccount"
-        })
+        }),
+        async connectAccount():Promise<void> {
+            await this.fetchAccount()
+            await this.hideModal()
+        }
     },
 })
 </script>

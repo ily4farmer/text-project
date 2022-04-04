@@ -33,10 +33,12 @@ export default defineComponent({
         }
     }
 
-     @media screen and (max-width: 688px) {
+     @media screen and (max-width: 770px) {
         .stock {
             &__list {
                 justify-content: center;
+                flex-direction: column;
+                align-items: center;
             }
         }
      }

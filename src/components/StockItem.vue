@@ -27,6 +27,7 @@ export default defineComponent({
             border: 1px solid #DFEBF5;
             border-radius: 24px;
             max-width: 330px;
+            margin-bottom: 15px;
         }
 
         &__title {
@@ -51,6 +52,10 @@ export default defineComponent({
             width: 100%;
             margin-top: 8px;
             margin-bottom: 8px;
+            &-text {
+                color: #DA554A;
+                margin-right: 5px;
+            }
         }
 
         &__hover {

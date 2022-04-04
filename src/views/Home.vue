@@ -4,7 +4,7 @@
             <div class="content__block">
                 <div class="content__header">
                     <h1 class="content__title">Staking App</h1>
-                    <div class="content__approved">
+                    <div class="content__approved" v-if="getHideFrom">
                         Wallet approved
                         <img 
                             class="content__approved-img" 
@@ -14,17 +14,37 @@
                     </div>
                 </div>
                 <StockList/>
-                <div class="prompt">
+                <div class="prompt" v-if="!getHideFrom">
                     <p class="prompt__text">
                         <img class="prompt__img" src="@/Icons/Informatıon.svg" alt="Informatıon"/>
                         To perform actions on the page, connect your wallet
                     </p>
                 </div>
-                <StakeForm/>
-                <div class="content__footer">
+                <StakeForm v-if="getHideFrom"/>
+                <div class="content__footer" v-if="!getConnectAccount">
                     <div class="content__connect" @click="showModal">
                         <Button>
                             Connect wallet
+                        </Button>  
+                    </div>
+                    <div class="content__vallet">
+                            View contract
+                    </div>  
+                </div>
+                <div class="content__footer" v-if="getApproveWallet && !getHideFrom">
+                    <div class="content__connect" @click="setHideFrom">
+                        <Button>
+                            Approve wallet
+                        </Button>  
+                    </div>
+                    <div class="content__vallet">
+                            View contract
+                    </div>  
+                </div>
+                <div class="content__footer" v-if="getHideFrom">
+                    <div class="content__connect" @click="setHideFrom">
+                        <Button>
+                            Stake
                         </Button>  
                     </div>
                     <div class="content__vallet">
@@ -43,16 +63,27 @@ import StockList from "@/components/StockList.vue"
 import StakeForm from "@/components/StakeForm.vue"
 import Modal from "@/components/Modal.vue"
 import Button from "@/shared/Button.vue"
-import { mapMutations} from 'vuex'
+import { mapGetters, mapMutations, mapState} from 'vuex'
 
 export default defineComponent({
     components: { StockList, StakeForm, Modal, Button },
     methods: {
         ...mapMutations({
             showModal: "modal/showModal",
+            setConnect: "connect/setConnect",
+            setApproveWallet: "connect/setApproveWallet",
+            setHideFrom: "connect/setHideFrom",
         })
     },
     computed: {
+        ...mapState({
+            connectAccount: "connect/connectAccount",
+        }),
+        ...mapGetters({
+            getConnectAccount: "connect/getConnectAccount",
+            getApproveWallet: "connect/getApproveWallet",
+            getHideFrom: "connect/getHideFrom",
+        })
     }
 })
 </script>
@@ -173,6 +204,17 @@ export default defineComponent({
 
     @media screen and (max-width: 625px) {
         .content {
+            &__header {
+                flex-direction: column;
+                & > div {
+                    margin-top: 10px;
+                }
+            }
+
+            &__title {
+                text-align: center;
+            }
+
             &__footer {
                 flex-direction: column;
                 justify-content: center;
