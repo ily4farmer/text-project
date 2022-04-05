@@ -16,12 +16,11 @@ import { defineComponent } from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default defineComponent({
-    // data() {
-    //     return {
-    //         value: '',
-    //         err: false
-    //     }
-    // },
+    data() {
+        return {
+            color: '#DFEBF5',
+        }
+    },
     props: {
         value: { type: Number},
         err: { type: Boolean},
@@ -29,16 +28,26 @@ export default defineComponent({
     methods: {
         ...mapMutations({
             setInput: "connect/setInput",
+            setError: "connect/setError",
         }),
         inputHandler(e: any):void {
-            this.setInput(e.target.value)
+            const value = Number(e.target.value)
+            this.setError()
+            this.setInput(value)
         }
     },
     computed: { 
         ...mapGetters({
             getInputValue: "connect/getInputValue",
             getError: "connect/getError",
-        })
+        }),
+        errorHandler() {
+            if (this.getError) {
+                return "#DA554A"
+            } else {
+                return "#DFEBF5"
+            }
+        }
     }
 })
 </script>
@@ -57,7 +66,9 @@ export default defineComponent({
     }
     .input {
         background: #FFFFFF;
-        border: 1px solid #DFEBF5;
+        border-width: 1px;
+        border-style: solid;
+        border-color: v-bind(errorHandler);
         border-radius: 8px;
         width: 100%;
         font-family: 'Noto Sans';

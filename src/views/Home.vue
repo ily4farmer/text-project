@@ -27,29 +27,29 @@
                             Connect wallet
                         </Button>  
                     </div>
-                    <div class="content__vallet">
+                    <a href="https://testnet.bscscan.com/address/0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C#code" class="content__vallet">
                             View contract
-                    </div>  
+                    </a>  
                 </div>
                 <div class="content__footer" v-if="getApproveWallet && !getHideFrom">
-                    <div class="content__connect" @click="setHideFrom">
+                    <div class="content__connect" @click="approveWallet">
                         <Button>
                             Approve wallet
                         </Button>  
                     </div>
-                    <div class="content__vallet">
+                     <a href="https://testnet.bscscan.com/address/0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C#code" class="content__vallet">
                             View contract
-                    </div>  
+                    </a>   
                 </div>
                 <div class="content__footer" v-if="getHideFrom">
                     <div class="content__connect" @click="setHideFrom">
-                        <Button>
+                        <Button @click="stakeHandler">
                             Stake
                         </Button>  
                     </div>
-                    <div class="content__vallet">
+                     <a href="https://testnet.bscscan.com/address/0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C#code" class="content__vallet">
                             View contract
-                    </div>  
+                    </a>  
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@ import StockList from "@/components/StockList.vue"
 import StakeForm from "@/components/StakeForm.vue"
 import Modal from "@/components/Modal.vue"
 import Button from "@/shared/Button.vue"
-import { mapGetters, mapMutations, mapState} from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState} from 'vuex'
 
 export default defineComponent({
     components: { StockList, StakeForm, Modal, Button },
@@ -73,7 +73,16 @@ export default defineComponent({
             setConnect: "connect/setConnect",
             setApproveWallet: "connect/setApproveWallet",
             setHideFrom: "connect/setHideFrom",
-        })
+            setStakeTo: "connect/setStakeTo",
+        }),
+        ...mapActions({
+            approveWallet: "connect/approveWallet",
+        }),
+
+        stakeHandler() {
+            this.setStakeTo();
+            this.$router.push('/approved')
+        }
     },
     computed: {
         ...mapState({

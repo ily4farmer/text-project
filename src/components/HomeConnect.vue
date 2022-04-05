@@ -72,6 +72,7 @@ export default defineComponent({
         }
 
         &__btn {
+            cursor: pointer;
             background: #FFFFFF;
             border: 1px solid #DFEBF5;
             border-radius: 12px;

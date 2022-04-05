@@ -1,13 +1,15 @@
 <template>
+<div>
   <NavBar/>
   <main>
     <router-view></router-view>
   </main>
   <Footer/>
   <Modal>
-    <HomeConnect/>
-    <!-- <ApprovedForm/> -->
+    <HomeConnect v-if="!getTransition"/>
+    <ApprovedForm v-if="getTransition"/>
   </Modal>
+</div>
 </template>
 
 <script lang="ts">
@@ -20,10 +22,25 @@ import Modal from "@/components/Modal.vue"
 import ModalApproved from "@/components/ModalApproved.vue"
 import HomeConnect from "@/components/HomeConnect.vue"
 import ApprovedForm from "@/components/ApprovedForm.vue"
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default defineComponent({
     components: { NavBar, Footer, Modal, HomeConnect, ModalApproved, ApprovedForm },
+    methods: {
+      ...mapMutations({
+        setStakeFrom: "connect/setStakeFrom"
+      })
+    },
+    computed: {
+      ...mapGetters({
+        getTransition: "connect/getTransition"
+      })
+    },
+    mounted() {
+      this.setStakeFrom()
+      this.$router.push('/')
+
+    }
 })
 </script>
 

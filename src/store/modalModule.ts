@@ -3,10 +3,14 @@
 export const modalModule = {
     state: () => ({
         show: false,
+        notice: false
     }),
     getters: {
         getShow(state: any) {
           return state.show
+        },
+        getNotice(state: any) {
+          return state.notice
         }
     },
     mutations: {
@@ -16,6 +20,12 @@ export const modalModule = {
         hideModal(state: any) {
           state.show = false;
         },
+        showNotice(state: any) {
+          state.notice = true
+        },
+        hideNotice(state: any) {
+          state.notice = false
+        }
       },
     actions: {
     },

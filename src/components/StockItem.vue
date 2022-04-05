@@ -1,5 +1,5 @@
 <template>
-    <li class="stock__item">
+    <li class="stock__item" @click="range">
         <h3 class="stock__title">{{el.title}} Days</h3>
         <div class="stock__apy">
             <span class="stock__apy-text">APY: {{el.apy}}% </span>
@@ -12,17 +12,48 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapMutations } from 'vuex';
 
 export default defineComponent({
    props: {
        el: { type: Object, required: true }
    },
+   data() {
+        return {
+            color: '#333',
+        }
+    },
+    methods: {
+        ...mapMutations({
+            activeItem: "stock/activeItem",
+            minRangeAmount: "connect/minRangeAmount",
+            maxRangeAmount: "connect/maxRangeAmount",
+            setApy: "connect/setApy",
+        }),
+        range():void {
+            this.activeItem(this.el.id)
+            this.setApy(this.el.apy)
+            this.minRangeAmount(this.el.amountMin)
+            this.maxRangeAmount(this.el.amountMax)
+        }
+    },
+    computed: {
+        getColor() {
+            if (this.el.color) {
+                 return this.color = "#EFF3F8"
+            } else {
+                return this.color = "#fff"
+            }
+        }
+    }
 })
 </script>
 
 <style lang="scss" scoped>
     .stock {
         &__item {
+            cursor: pointer;
+            background: v-bind(getColor);
             padding: 24px 28px 20px 28px;
             border: 1px solid #DFEBF5;
             border-radius: 24px;

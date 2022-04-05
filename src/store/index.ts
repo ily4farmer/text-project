@@ -6,7 +6,7 @@ import { connectModule } from './connectModule'
 export default createStore({
   modules: {
     modal: modalModule,
-    stock: stockModule,
+    stock: <any>stockModule,
     connect: connectModule
   }
 })

@@ -16,29 +16,29 @@
                 </div>
                 <ApprovedInfo/>
                 <div class="content__footer">
-                    <div class="content__footer-wrapper" v-if="true">
-                        <Button style="background: #B7C6D8; margin-right: 12px;">
-                            00:00:09
+                    <div class="content__footer-wrapper" v-if="showTimeButton">
+                        <Button style="background: #B7C6D8; margin-right: 12px;" @click="setTime">
+                            00:00:0{{time}}
                         </Button>  
-                        <Button>
+                        <Button @click="showModal">
                             Replenish
                         </Button> 
                     </div>
-                    <div class="content__footer-wrapper" v-if="false">
+                    <div class="content__footer-wrapper" v-if="!showTimeButton">
                         <Button style="margin-right: 12px;">
                            Restake
                         </Button>  
                         <div class="content__vallet" style="width: 230px; margin-top: 0;">Unstake</div>  
                     </div>
                      <div class="content__footer-wrapper" v-if="false">
-                        <Button style="background: #B7C6D8; margin-right: 12px;" >
+                        <Button style="background: #B7C6D8; margin-right: 12px;">
                             00:00:09
                         </Button>   
                         <div class="content__notice">You have max. amount TKN</div>  
                     </div>
-                    <div class="content__vallet" @click="$store.commit('increment')">
+                    <a href="https://testnet.bscscan.com/address/0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C#code" class="content__vallet">
                             View contract
-                    </div>  
+                    </a>
                 </div>
             </div>
         </div>
@@ -52,11 +52,39 @@ import StockList from "@/components/StockList.vue"
 import StakeForm from "@/components/StakeForm.vue"
 import ApprovedInfo from "@/components/ApprovedInfo.vue"
 import Button from "@/shared/Button.vue"
+import { mapMutations } from 'vuex'
 
 export default defineComponent({
     components: { StockList, StakeForm, ApprovedInfo, Button},
     props: {
         approved: { type: Boolean }
+    },
+    data() {
+        return { 
+            time: 9,
+            showTimeButton: true
+        }
+    },
+    mounted() {
+        setTimeout(() => this.time = 8, 1000)
+            setTimeout(() => this.time = 7, 2000)
+            setTimeout(() => this.time = 6, 3000)
+            setTimeout(() => this.time = 5, 4000)
+            setTimeout(() => this.time = 4, 5000)
+            setTimeout(() => this.time = 3, 6000)
+            setTimeout(() => this.time = 2, 7000)
+            setTimeout(() => this.time = 1, 8000)
+            setTimeout(() => {
+                this.time = 0
+                this.showTimeButton = false
+                this.showNotice();
+            }, 9000)
+    },
+    methods: {
+        ...mapMutations({
+          showNotice: "modal/showNotice",
+          showModal: "modal/showModal"
+        }),
     }
 })
 </script>

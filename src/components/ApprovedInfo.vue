@@ -5,19 +5,19 @@
         <ul class="info__list">
             <li class="info__item">
                 <span class="info__item-subtitle">From </span>
-                <h3 class="info__item-title">22 Jun, 14:14</h3>
+                <h3 class="info__item-title">{{getStakeFrom}}</h3>
             </li>
             <li class="info__item">
                 <span class="info__item-subtitle">To </span>
-                <h3 class="info__item-title">22 Jun, 14:17</h3>
+                <h3 class="info__item-title">{{getStakeTo}}</h3>
             </li>
             <li class="info__item">
                 <span class="info__item-subtitle">Staked </span>
-                <h3 class="info__item-title">1000 TKN</h3>
+                <h3 class="info__item-title">{{getInputValue}} TKN</h3>
             </li>
             <li class="info__item">
                 <span class="info__item-subtitle">APY </span>
-                <h3 class="info__item-title">129,97%</h3>
+                <h3 class="info__item-title">{{getApy}}%</h3>
             </li>
         </ul>
     </div>
@@ -25,9 +25,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
-    
+    computed: {
+        ...mapGetters({
+            getApy: "connect/getApy",
+            getInputValue: "connect/getInputValue",
+            getStakeFrom: "connect/getStakeFrom",
+            getStakeTo: "connect/getStakeTo"
+        })
+    }
 })
 </script>
 

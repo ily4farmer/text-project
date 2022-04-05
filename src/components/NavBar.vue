@@ -5,7 +5,7 @@
                 <nav class="nav">
                     <ul class="nav__list">
                         <li class="nav__item" @click="$router.push('/')">Stacking</li>
-                        <li class="nav__item" style="margin-left: 40px" @click="$router.push('/approved')">Bridge</li>
+                        <li class="nav__item" style="margin-left: 40px">Bridge</li>
                         <li class="nav__item" style="margin-left: 40px">SHO</li>
                         <li class="nav__item">
                             <div @click="showModal" class="nav__button" v-if="!getHideFrom">
@@ -13,7 +13,7 @@
                             </div>
                             <div class="nav__account" v-if="getHideFrom">
                                 <div class="nav__wallet">
-                                    <span>0хCb99...8EBb</span>
+                                    <span>{{getWallet}}</span>
                                     <img 
                                         class="content__approved-img" 
                                         src="@/Icons/AddressAccount.svg" 
@@ -21,7 +21,7 @@
                                     />
                                 </div>
                                 <div class="nav__balance">
-                                    <span>0.029 BUSD</span>
+                                    <span>0.000 BUSD</span>
                                     <img
                                         class="content__approved-img" 
                                         src="@/Icons/Currency.svg" 
@@ -52,7 +52,7 @@
                             </div>
                             <div class="nav__account" v-if="getHideFrom">
                                 <div class="nav__wallet">
-                                    <span>0хCb99...8EBb</span>
+                                    <span>{{getWallet}}</span>
                                     <img 
                                         class="content__approved-img" 
                                         src="@/Icons/AddressAccount.svg" 
@@ -109,6 +109,7 @@ export default defineComponent({
         ...mapGetters({
             getAll: "connect/getAll",
             getHideFrom: "connect/getHideFrom",
+            getWallet: "connect/getWallet"
         }),
     }
 })
@@ -281,6 +282,7 @@ export default defineComponent({
             &__account {
                 flex-direction: column;
                 justify-content: flex-end;
+                align-items: flex-end;
                 padding-right: 0;
                 & > img {
                     width: 10px;

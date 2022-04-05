@@ -1,15 +1,20 @@
 <template>
     <div class="notice">
         <p class="notice__text">Transaction confirmed! Click here to see it</p>
-        <img class="notice__img" src="@/Icons/NoticeClose.svg" alt="Close"/>
+        <img class="notice__img" src="@/Icons/NoticeClose.svg" alt="Close" @click="hideNotice"/>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapMutations } from 'vuex'
 
 export default defineComponent({
-    
+    methods: {
+        ...mapMutations({
+            hideNotice: "modal/hideNotice"
+        })
+    }
 })
 </script>
 
@@ -38,6 +43,7 @@ export default defineComponent({
 
         &__img {
             margin-left: 20px;
+            cursor: pointer;
         }
     }
 </style>
