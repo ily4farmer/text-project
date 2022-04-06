@@ -25,10 +25,12 @@
                         </Button> 
                     </div>
                     <div class="content__footer-wrapper" v-if="!showTimeButton">
-                        <Button style="margin-right: 12px;">
+                        <Button style="margin-right: 12px;" @click="$router.push('/')">
                            Restake
                         </Button>  
-                        <div class="content__vallet" style="width: 230px; margin-top: 0;">Unstake</div>  
+                        <div class="content__vallet" style="width: 230px; margin-top: 0;" @click="$router.push('/')">
+                            Unstake
+                        </div>  
                     </div>
                      <div class="content__footer-wrapper" v-if="false">
                         <Button style="background: #B7C6D8; margin-right: 12px;">

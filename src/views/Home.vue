@@ -80,8 +80,12 @@ export default defineComponent({
         }),
 
         stakeHandler() {
-            this.setStakeTo();
-            this.$router.push('/approved')
+            if (!this.getError) {
+                this.setStakeTo();
+                this.$router.push('/approved')   
+            } else {
+                alert("Fix Error")
+            }
         }
     },
     computed: {
@@ -92,6 +96,7 @@ export default defineComponent({
             getConnectAccount: "connect/getConnectAccount",
             getApproveWallet: "connect/getApproveWallet",
             getHideFrom: "connect/getHideFrom",
+            getError: "connect/getError"
         })
     }
 })

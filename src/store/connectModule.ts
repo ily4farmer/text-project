@@ -43,6 +43,9 @@ export const connectModule = {
         getInputValue(state:State):number {
           return state.inputValue
         },
+        getMaxAmount(state:State):number {
+          return state.maxAmount
+        },
         getApy(state:State): string {
             return state.apy
         },
@@ -76,6 +79,13 @@ export const connectModule = {
     mutations: {
         setInput(state:State, value: number) {
           state.inputValue = value
+          if (value < state.minAmount) {
+            state.errorInput = true
+          } else if(value > state.maxAmount){
+            state.errorInput = true
+          } else {
+            state.errorInput = false
+          }
         },
         setApy(state:State, value: string) {
           state.apy = value

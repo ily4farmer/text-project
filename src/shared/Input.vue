@@ -32,7 +32,7 @@ export default defineComponent({
         }),
         inputHandler(e: any):void {
             const value = Number(e.target.value)
-            this.setError()
+            // this.setError()
             this.setInput(value)
         }
     },

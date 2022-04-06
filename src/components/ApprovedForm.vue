@@ -5,7 +5,7 @@
             <div class="form__header">
                 <div class="form__header-item">
                     <span class="form__header-amount">Max. amount = </span>
-                    <span class="form__header-result">1000 TKN</span>
+                    <span class="form__header-result">{{getMaxAmount}} TKN</span>
                 </div>
                 <div class="form__header-item">
                     <span class="form__header-amount">Available amount = </span>
@@ -21,8 +21,14 @@
 <script>
     import Input from "@/shared/Input.vue"
     import Button from "@/shared/Button.vue"
+import { mapGetters } from 'vuex'
     export default {
         components: { Input, Button },
+        computed: {
+            ...mapGetters({
+                getMaxAmount: "connect/getMaxAmount"
+            })
+        }
     }
 </script>
 

@@ -7,6 +7,6 @@ export default createStore({
   modules: {
     modal: modalModule,
     stock: <any>stockModule,
-    connect: connectModule
+    connect: <any>connectModule
   }
 })
