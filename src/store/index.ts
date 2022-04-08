@@ -2,6 +2,13 @@ import { createStore } from 'vuex'
 import { modalModule } from './modalModule'
 import { stockModule } from './stockModule'
 import { connectModule } from './connectModule'
+import { providers } from 'ethers'
+
+declare global {
+  interface Window {
+    ethereum?: providers.ExternalProvider & providers.Web3Provider
+  }
+}
   
 export default createStore({
   modules: {

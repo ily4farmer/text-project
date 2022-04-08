@@ -21,7 +21,7 @@
                                     />
                                 </div>
                                 <div class="nav__balance">
-                                    <span>0.000 BUSD</span>
+                                    <span>{{balance()}} BUSD</span>
                                     <img
                                         class="content__approved-img" 
                                         src="@/Icons/Currency.svg" 
@@ -52,7 +52,7 @@
                             </div>
                             <div class="nav__account" v-if="getHideFrom">
                                 <div class="nav__wallet">
-                                    <span>{{getWallet}}</span>
+                                    <span>{{balance()}}</span>
                                     <img 
                                         class="content__approved-img" 
                                         src="@/Icons/AddressAccount.svg" 
@@ -60,7 +60,7 @@
                                     />
                                 </div>
                                 <div class="nav__balance">
-                                    <span>0.029 BUSD</span>
+                                    <span>{{BNToNumstr(getBalance)}} BUSD</span>
                                     <img
                                         class="content__approved-img" 
                                         src="@/Icons/Currency.svg" 
@@ -85,6 +85,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters, mapMutations} from 'vuex'
+import { BNToNumstr } from '@/BigNumber'
 
 export default defineComponent({
     data() {
@@ -104,12 +105,20 @@ export default defineComponent({
         hideMenu() {
             this.show = false
         }, 
+        BNToNumstr,
+        balance() {
+            const a = this.BNToNumstr(this.getBalance, 18, 10)
+            // const arr = a.split(".")
+            // return `${arr[0]}.${arr[1].slice(0, 3)}`
+            return a
+        },
     },
     computed: {
         ...mapGetters({
             getAll: "connect/getAll",
             getHideFrom: "connect/getHideFrom",
-            getWallet: "connect/getWallet"
+            getWallet: "connect/getWallet",
+            getBalance: "connect/getBalance",
         }),
     }
 })

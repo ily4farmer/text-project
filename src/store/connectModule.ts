@@ -1,11 +1,13 @@
-import { ethers, BigNumber } from "ethers"
+import { ethers, BigNumber, providers } from "ethers"
 const ABI = require('../ABI.json')
+const TokenContractAbi = require("../TokenContract.json")
 
 interface State {
   contract: object,
   wallet: any,
-  balance: string,
+  balance: BigNumber,
   TKN: string,
+  signer: any,
   inputValue: number,
   errorInput: boolean,
   maxAmount: number,
@@ -20,13 +22,15 @@ interface State {
 }
 
 const address = "0x3514E8A6Ca64B6861B7054bbFb5A5ea75392eb9C"
+const addressToken = "0x275E113c3cd4f80133F99932aAaFaC4A4BA06524"
 
 export const connectModule = {
     state: ():State => ({
         contract: {},
         wallet: "",
-        balance: "",
+        balance: BigNumber.from(0),
         TKN: "",
+        signer: () => null as providers.JsonRpcSigner | null,
         inputValue: 10000,
         maxAmount: 12499,
         minAmount: 10000,
@@ -60,8 +64,8 @@ export const connectModule = {
           const last = state.wallet.length - 1
           return `${state.wallet[0]}${state.wallet[1]}${state.wallet[2]}${state.wallet[3]}${state.wallet[4]}${state.wallet[5]}...${state.wallet[last-3]}${state.wallet[last-2]}${state.wallet[last-1]}${state.wallet[last]}`
         },
-        getApproveWallet(state:State):boolean {
-          return state.approveWallet
+        getBalance(state:State):BigNumber {
+          return state.balance
         },
         getHideFrom(state:State):boolean {
           return state.hideFrom
@@ -74,6 +78,9 @@ export const connectModule = {
         },
         getTransition(state:State):boolean {
           return state.transition
+        },
+        getApproveWallet(state:State): boolean {
+          return state.approveWallet
         }
     },
     mutations: {
@@ -108,11 +115,14 @@ export const connectModule = {
         setWallet(state:State, value: string){
           state.wallet = value
         },
-        setBalance(state:State, value: string) {
+        setBalance(state:State, value: BigNumber) {
           state.balance = value
         },
         setTKN(state:State, value: string) {
           state.TKN = value
+        },
+        setSinger(state:State, value: any) {
+          state.signer = value
         },
         setConnect(state:State) {
           state.connectAccount = true
@@ -156,15 +166,17 @@ export const connectModule = {
             
             //Дает нам возможность читать view методы контракта
             const signer = provider.getSigner()
+            commit("setSinger", signer)
             //Нужен для подтверждения транзакций
             const wallet = await signer.getAddress(); 
+            
             commit("setWallet", wallet)
             
              // Получить адрес кошелька
          
             // Получить кошелек
             const balance = await provider.getBalance(wallet)
-            // state.balance = "ffdg"
+
             
             commit("setBalance", balance._hex)
             commit("setConnect")
@@ -191,18 +203,38 @@ export const connectModule = {
         }
 			
       },
-      async approveWallet({state, commit}: any) {
-        if ((window as any).ethereum) {
-          try {
-            const provider = await new ethers.providers.Web3Provider((window as any).ethereum)
-            const contract = await new ethers.Contract(state.TKN, ABI, provider)
+      async approveWallet({state, commit, dispatch}: any) {
+          const provider = new ethers.providers.Web3Provider((window as any).ethereum)
+          const signer = provider.getSigner()
+          const tokenContract = new ethers.Contract(addressToken, TokenContractAbi, signer)
+          const balance = await tokenContract.balanceOf(state.wallet)
+          commit("setBalance", balance._hex)
+          const allowance = await tokenContract.allowance(state.wallet , address)
+
+          if (!allowance) {
+            try {
             
-            await commit("setHideFrom");
-            
-          } catch (error) {
-            
+              let tx
+              try {
+                tx = await tokenContract.approve(address , BigNumber.from('1').mul(10).pow(18))
+                // tx = await tokenContract.allowance(state.wallet , address)
+                commit("setHideFrom")
+              }
+              catch (err) {
+                console.log(err)
+              }
+              console.log(tx);
+            } catch (error) {
+              
+            } 
+          } else {
+            commit("setHideFrom")
           }
-        }
+      },
+      async stake({state}: any) {
+        const provider = new ethers.providers.Web3Provider((window as any).ethereum)
+        //С помощью провайдера мы подключаемся к сети Blockcain
+        const contract = new ethers.Contract(address, ABI, provider)
       }
     },
     namespaced: true
